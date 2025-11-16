@@ -53,3 +53,19 @@ def get_attachment(thread_id: str, attachment_id: str, api_key: str = None) -> b
     client = get_client(api_key)
     return client.threads.get_attachment(thread_id=thread_id, attachment_id=attachment_id)
 
+
+def delete_thread(thread_id: str, inbox_id: str, api_key: str = None) -> Dict[str, Any]:
+    """
+    Delete a thread by ID.
+    
+    Args:
+        thread_id: The ID of the thread to delete
+        inbox_id: The ID of the inbox that owns the thread
+        api_key: Optional API key. If not provided, will load from environment.
+    
+    Returns:
+        Deletion result
+    """
+    client = get_client(api_key)
+    return client.inboxes.threads.delete(inbox_id=inbox_id, thread_id=thread_id)
+
