@@ -1,0 +1,2 @@
+"""Inbox examples package."""
+
