@@ -163,7 +163,8 @@ AgentMailTest/
 **Functionality Implemented**:
 - `list_webhooks()` - List all configured webhooks
 - `get_webhook(webhook_id)` - Retrieve webhook configuration
-- `create_webhook(url, events=None)` - Create a new webhook endpoint
+- `create_webhook(url, event_types=None, inbox_ids=None, client_id=None)` - Create a new webhook endpoint
+  - `event_types`: Optional list of event types. Currently only 'message.received' is supported. If not provided, defaults to ['message.received']
 - `delete_webhook(webhook_id)` - Remove a webhook
 
 **Use Cases**:

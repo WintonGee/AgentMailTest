@@ -162,8 +162,9 @@ inboxes = client.inboxes.list()
 
 - `list_webhooks(limit=None, page_token=None)` - List all webhooks with pagination
 - `get_webhook(webhook_id)` - Get webhook details
-- `create_webhook(url, event_types, inbox_ids=None, client_id=None)` - Create a webhook
-  - `event_types`: Required list of event types: 'message.received', 'message.sent', 'message.delivered', 'message.bounced', 'message.complained', 'message.rejected'
+- `create_webhook(url, event_types=None, inbox_ids=None, client_id=None)` - Create a webhook
+  - `event_types`: Optional list of event types. Currently only 'message.received' is supported. If not provided, defaults to ['message.received']
+  - Valid values: 'message.received', 'message.sent', 'message.delivered', 'message.bounced', 'message.complained', 'message.rejected'
 - `delete_webhook(webhook_id)` - Delete a webhook
 
 ## Architecture

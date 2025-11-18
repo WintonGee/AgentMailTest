@@ -4,14 +4,18 @@ Webhook configuration module.
 Provides functions to configure webhooks for real-time event notifications.
 
 Event Types:
-    - message.received: Triggered when a message is received
-    - message.sent: Triggered when a message is sent
-    - message.delivered: Triggered when a message is delivered
-    - message.bounced: Triggered when a message bounces
-    - message.complained: Triggered when a message receives a complaint
-    - message.rejected: Triggered when a message is rejected
+    - message.received: Triggered when a message is received (currently supported)
+    - message.sent: Triggered when a message is sent (future support)
+    - message.delivered: Triggered when a message is delivered (future support)
+    - message.bounced: Triggered when a message bounces (future support)
+    - message.complained: Triggered when a message receives a complaint (future support)
+    - message.rejected: Triggered when a message is rejected (future support)
+
+Note: Currently, AgentMail only supports the 'message.received' event type.
+When creating a webhook, event_types is optional and defaults to ['message.received'].
 
 Reference: https://docs.agentmail.to/api-reference/webhooks/list
+Reference: https://docs.agentmail.to/overview
 """
 
 from typing import List, Dict, Any, Optional, Literal, Union
@@ -80,7 +84,7 @@ def get_webhook(webhook_id: str, api_key: str = None) -> Dict[str, Any]:
 
 def create_webhook(
     url: str,
-    event_types: List[Union[EventType, str]],
+    event_types: Optional[List[Union[EventType, str]]] = None,
     inbox_ids: Optional[List[str]] = None,
     client_id: Optional[str] = None,
     api_key: str = None
@@ -90,7 +94,9 @@ def create_webhook(
     
     Args:
         url: The webhook URL to receive events (required)
-        event_types: List of event types to subscribe to (required).
+        event_types: Optional list of event types to subscribe to.
+                    Currently, AgentMail only supports 'message.received'.
+                    If not provided, defaults to ['message.received'].
                     Valid values: 'message.received', 'message.sent',
                     'message.delivered', 'message.bounced', 'message.complained',
                     'message.rejected'
@@ -110,19 +116,18 @@ def create_webhook(
             - updated_at: Last update timestamp
             - client_id: Client identifier (if provided)
     
-    Raises:
-        ValueError: If event_types is empty or contains invalid event types
+    Reference: https://docs.agentmail.to/overview
     """
-    if not event_types:
-        raise ValueError("event_types is required and cannot be empty")
-    
     client = get_client(api_key)
     
     # Build parameters
     params = {
-        "url": url,
-        "event_types": event_types
+        "url": url
     }
+    
+    # Only include event_types if provided
+    if event_types is not None:
+        params["event_types"] = event_types
     
     if inbox_ids is not None:
         params["inbox_ids"] = inbox_ids

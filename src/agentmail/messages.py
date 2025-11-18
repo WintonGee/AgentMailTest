@@ -14,6 +14,7 @@ def send_message(
     subject: str,
     text: Optional[str] = None,
     html: Optional[str] = None,
+    labels: Optional[List[str]] = None,
     api_key: str = None,
     **kwargs
 ) -> Dict[str, Any]:
@@ -26,6 +27,7 @@ def send_message(
         subject: Email subject line
         text: Optional plain text body of the email
         html: Optional HTML body of the email
+        labels: Optional list of label strings to apply to the message
         api_key: Optional API key. If not provided, will load from environment.
         **kwargs: Additional parameters for message sending
     
@@ -38,21 +40,25 @@ def send_message(
     if isinstance(to, str):
         to = [to]
     
-    params = {
-        "inbox_id": inbox_id,
+    # Build request body parameters (inbox_id is a path parameter, not in body)
+    request_body = {
         "to": to,
         "subject": subject
     }
     
     if text is not None:
-        params["text"] = text
+        request_body["text"] = text
     
     if html is not None:
-        params["html"] = html
+        request_body["html"] = html
     
-    params.update(kwargs)
+    if labels is not None:
+        request_body["labels"] = labels
     
-    return client.inboxes.messages.send(**params)
+    request_body.update(kwargs)
+    
+    # Pass inbox_id as path parameter and request_body as body
+    return client.inboxes.messages.send(inbox_id=inbox_id, **request_body)
 
 
 def reply_message(

@@ -1,4 +1,4 @@
-.PHONY: help list-inboxes create-inbox delete-first-inbox create-list-delete-inbox list-threads delete-first-thread send-message check-env
+.PHONY: help list-inboxes create-inbox delete-first-inbox create-list-delete-inbox list-threads delete-first-thread send-message send-bulk-labels check-env
 
 .DEFAULT_GOAL := help
 
@@ -14,6 +14,7 @@ help: ## Show this help message
 	@echo "  make list-threads          List all threads"
 	@echo "  make delete-first-thread   Delete the first thread found"
 	@echo "  make send-message          Send a message from first inbox to second inbox"
+	@echo "  make send-bulk-labels      Send bulk emails with labels for API limit testing"
 
 check-env: ## Check if .env file exists
 	@if [ ! -f .env ]; then \
@@ -42,3 +43,6 @@ delete-first-thread: check-env ## Delete the first thread found
 
 send-message: check-env ## Send a message from first inbox to second inbox
 	@$(PYTHON_PATH) $(PYTHON) examples/messages/send_message.py
+
+send-bulk-labels: check-env ## Send bulk emails with labels for API limit testing
+	@$(PYTHON_PATH) $(PYTHON) generations/send_bulk_with_labels.py

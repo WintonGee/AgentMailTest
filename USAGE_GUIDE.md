@@ -86,9 +86,9 @@ with open("attachment.pdf", "wb") as f:
 from src.agentmail.webhooks import create_webhook
 
 # Create a webhook that triggers on new emails
+# event_types is optional - defaults to ['message.received']
 webhook = create_webhook(
     url="https://your-server.com/webhook",
-    event_types=["message.received", "message.sent"],
     inbox_ids=["inbox_123"]  # Optional: specific inboxes only
 )
 
@@ -98,12 +98,14 @@ print(f"Secret: {webhook['secret']}")  # Save this for verification!
 
 **Event Types Available:**
 
-- `message.received` - New email arrived
-- `message.sent` - Email was sent
-- `message.delivered` - Email was delivered
-- `message.bounced` - Email bounced
-- `message.complained` - Spam complaint
-- `message.rejected` - Email was rejected
+- `message.received` - New email arrived (currently supported)
+- `message.sent` - Email was sent (future support)
+- `message.delivered` - Email was delivered (future support)
+- `message.bounced` - Email bounced (future support)
+- `message.complained` - Spam complaint (future support)
+- `message.rejected` - Email was rejected (future support)
+
+**Note:** Currently, AgentMail only supports the `message.received` event type. The `event_types` parameter is optional and defaults to `['message.received']` if not provided.
 
 **Use Cases:**
 
@@ -277,9 +279,9 @@ from src.agentmail.webhooks import create_webhook
 inbox = create_inbox()
 
 # Set up webhook to notify your server
+# event_types is optional - defaults to ['message.received']
 webhook = create_webhook(
     url="https://api.yourapp.com/agentmail/webhook",
-    event_types=["message.received"],
     inbox_ids=[inbox['inbox_id']]
 )
 
